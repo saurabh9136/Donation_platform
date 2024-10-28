@@ -1,0 +1,46 @@
+<div class="login-container">
+    <div class="login-form">
+      <h2>Login</h2>
+      <!-- Ensure form uses ngForm correctly -->
+      <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            placeholder="Enter your username"
+            [(ngModel)]="email"
+            name="username"
+            required
+            #usernameInput="ngModel"
+          />
+          <!-- Show validation error for username -->
+          <div class="error-message" *ngIf="usernameInput.invalid && usernameInput.touched">
+            Username is required.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            [(ngModel)]="password"
+            name="password"
+            required
+            #passwordInput="ngModel"
+          />
+          <!-- Show validation error for password -->
+          <div class="error-message" *ngIf="passwordInput.invalid && passwordInput.touched">
+            Password is required.
+          </div>
+        </div>
+        <!-- Show error message received from API -->
+        <div class="error-message" *ngIf="apiErrorMessage">
+          {{ apiErrorMessage }}
+        </div>
+        <button type="submit" class="login-btn" [disabled]="loginForm.invalid">Login</button>
+      </form>
+    </div>
+  </div>
+  
