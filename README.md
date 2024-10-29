@@ -49,118 +49,104 @@ Danadiksha is a donation platform where users can connect with NGOs, make donati
 - **Database**: SQLite
 
 ---
+# Danadiksha API Documentation
 
 ## API Endpoints
 
-### 1. **User Registration** - `POST /api/users/register`
-Registers a new user with the provided details.
+1. **User Registration** - `POST /api/users/register`
+   - **Request**:
+     ```json
+     {
+       "first_name": "John",
+       "last_name": "Doe",
+       "email": "johndoe@example.com",
+       "password": "password123",
+       "mobile_number": "1234567890",
+       "city": "New York",
+       "address": "1234 Elm Street",
+       "country_region": "USA"
+     }
+     ```
+   - **Response**:
+     ```json
+     {
+       "user_id": "123e4567-e89b-12d3-a456-426614174000",
+       "email": "johndoe@example.com",
+       "status": "Active"
+     }
+     ```
 
-**Request**:
-```json
-{
-  "first_name": "John",
-  "last_name": "Doe",
-  "email": "johndoe@example.com",
-  "password": "password123",
-  "mobile_number": "1234567890",
-  "city": "New York",
-  "address": "1234 Elm Street",
-  "country_region": "USA"
-}
-**Response**:
-```json
-{
-  "user_id": "123e4567-e89b-12d3-a456-426614174000",
-  "email": "johndoe@example.com",
-  "status": "Active"
-}
+2. **NGO Registration** - `POST /api/ngos/register`
+   - **Request**:
+     ```json
+     {
+       "ngo_name": "Animal Welfare",
+       "email": "contact@animalwelfare.org",
+       "password": "securepassword",
+       "registration_number": "12345",
+       "mobile_number": "1234567890",
+       "city": "San Francisco",
+       "address": "5678 Oak Street",
+       "country_region": "USA"
+     }
+     ```
+   - **Response**:
+     ```json
+     {
+       "ngo_id": "123e4567-e89b-12d3-a456-426614174000",
+       "email": "contact@animalwelfare.org",
+       "status": "Active"
+     }
+     ```
 
+3. **User Login** - `POST /api/login`
+   - **Request**:
+     ```json
+     {
+       "email": "johndoe@example.com",
+       "password": "password123"
+     }
+     ```
+   - **Response**:
+     ```json
+     {
+       "access": "<JWT Access Token>",
+       "refresh": "<JWT Refresh Token>",
+       "user": 1
+     }
+     ```
 
-### 2. **NGO Registration** - `POST /api/ngos/register`
-Registers a new NGO with the provided details.
+4. **Create Donation** - `POST /api/donations/`
+   - **Request**:
+     ```json
+     {
+       "user": "123e4567-e89b-12d3-a456-426614174000",
+       "ngo": "987e6543-e89b-12d3-a456-426614174111",
+       "amount": 100,
+       "message": "For a better cause",
+       "payment_method": "Credit Card"
+     }
+     ```
+   - **Response**:
+     ```json
+     {
+       "donation_id": "789e4567-e89b-12d3-a456-426614174333",
+       "status": "Initialized",
+       "amount": 100,
+       "message": "For a better cause"
+     }
+     ```
 
-**Request**:
-```json
-{
-  "ngo_name": "Animal Welfare",
-  "email": "contact@animalwelfare.org",
-  "password": "securepassword",
-  "registration_number": "12345",
-  "mobile_number": "1234567890",
-  "city": "San Francisco",
-  "address": "5678 Oak Street",
-  "country_region": "USA"
-}
-**Response**:
-```json
-{
-  "ngo_id": "123e4567-e89b-12d3-a456-426614174000",
-  "email": "contact@animalwelfare.org",
-  "status": "Active"
-}
-
-### 3. **User Login** - `POST /api/login`
-Authenticates the user and returns a JWT token.
-
-**Request**:
-```json
-{
-  "email": "johndoe@example.com",
-  "password": "password123"
-}
-
-**Response**:
-```json
-{
-  "access": "<JWT Access Token>",
-  "refresh": "<JWT Refresh Token>",
-  User : 1 // indicating whether the user is Donator or NGO
-}
-### 4. **Create Donation** - `POST /api/donations/`
-Creates a donation from a user to an NGO.
-
-**Request**:
-```json
-{
-  "user": "123e4567-e89b-12d3-a456-426614174000",
-  "ngo": "987e6543-e89b-12d3-a456-426614174111",
-  "amount": 100,
-  "message": "For a better cause",
-  "payment_method": "Credit Card"
-}
-
-
-**Response**:
-```json
-{
-  "donation_id": "789e4567-e89b-12d3-a456-426614174333",
-  "status": "Initialized",
-  "amount": 100,
-  "message": "For a better cause"
-}
-
-### 5. **Upload Tax Certificate and Video Proof** - `POST /api/donations/<donation_id>/upload_proof/`
-Allows NGOs to upload tax certificates and video proofs for donations.
-
-**Request**:
-tax_certificate: (File)
-video_proof: (File)
-
-**Response**:
-```json
-{
-  "status": "Success",
-  "message": "Tax certificate and video proof uploaded successfully."
-}
-
-
-## Future Improvements
-
-- **Email Notifications**: Integrate automated email notifications for users and NGOs upon donation, certificate upload, and registration.
-- **Donation History & Reporting**: Add a history view for users to track past donations with downloadable reports.
-- **Multiple Payment Methods**: Support additional payment options like PayPal and Stripe for flexible donations.
-- **Real-Time Updates**: Enable real-time updates using WebSockets or similar technology to notify users of NGO activities.
-- **Analytics Dashboard**: Provide NGOs with a dashboard for tracking donations, viewing reports, and analyzing donation trends.
-- **Enhanced Security**: Add features like two-factor authentication (2FA) for better account security.
+5. **Upload Tax Certificate and Video Proof** - `POST /api/donations/<donation_id>/upload_proof/`
+   - **Request**:
+     - `tax_certificate`: (File)
+     - `video_proof`: (File)
+   - **Response**:
+     ```json
+     {
+       "status": "Success",
+       "message": "Tax certificate and video proof uploaded successfully."
+     }
+     ```
 
 
